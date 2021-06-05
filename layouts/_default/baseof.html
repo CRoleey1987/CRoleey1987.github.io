@@ -1,47 +1,43 @@
-<!DOCTYPE html>
-<html lang="{{ with .Site.LanguageCode }}{{ . }}{{ else }}en-US{{ end }}">
-    <head>
-        {{ partial "head.html" . }}
-    </head>
+<!doctype html>
+<html lang="en">
+  <head>
+    {{ partial "head-meta" . }}
 
-    <body id="page-top">
-        {{ block "header" . }}
-            <header>
-                {{ partial "nav.html" (dict "context" . "fixed" false) }}
-                {{ partial "pages/hero.html" . }}
-            </header>
-        {{ end }}
+    <meta name="description" content="{{ .Description }}">
+    <link rel="canonical" href="{{ .Permalink }}">
 
-        {{ block "body" . }}
-            <main id="list-content">
-                {{ block "sidebar" . }}
-                    {{ partial "pages/sidebar.html" . }}
-                {{ end }}
-                <div class="list-page">
-                    <div class="list-page-container">
-                        <article class="list-page-content">
-                            {{ block "title" . }}
-                                {{ partial "pages/title.html" . }}
-                            {{ end }}
+    {{ $title := delimit (slice .Title "&middot;" .Site.Title) " " }}
+    <title>{{ $title }}</title>
 
-                            {{ block "content" . }}{{ end }}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="{{ .Site.BaseURL }}css/style.css" rel="stylesheet">
 
-                            {{ block "lists" . }}
-                                {{ partial "pages/lists.html" . }}
-                            {{ end }}
-                        </article>
-                    </div>
-                </div>
-            </main>
-        {{ end }}
+    {{ if .RSSLink }}
+      <link href="{{ .RSSLink }}" rel="alternate" type="application/rss+xml" title="{{ $title }}" />
+      <link href="{{ .RSSLink }}" rel="feed" type="application/rss+xml" title="{{ $title }}" />
+    {{ end }}
 
-        {{ block "footer" . }}
-            <footer>
-                {{ partial "footer.html" . }}
-            </footer>
-        {{ end }}
-        {{ block "tail" . }}
-            {{ partial "tail.html" . }}
-        {{ end }}
-    </body>
+    {{ template "_internal/google_analytics_async.html" . }}
+
+    {{ partial "head-custom.html" . }}
+  </head>
+  <body>
+    {{ block "header" . }}
+      {{ partial "header" . }}
+    {{ end }}
+
+    {{ block "main" . }}
+      <!-- The part of the page that begins to differ between templates -->
+    {{ end }}
+
+    {{ block "footer" . }}
+      {{ partial "footer" . }}
+    {{ end }}
+
+    <!--  Scripts-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="{{ .Site.BaseURL }}js/script.js"></script>
+  </body>
 </html>
